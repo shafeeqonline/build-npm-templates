@@ -1,0 +1,29 @@
+{
+  "name": "shafeeqplugin",
+  "version": "1.0.0",
+  "description": "Webpack plugin to build CQ files from node modules",
+  "main": "index.js",
+  "dependencies": {
+    "ncp": "^2.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shafeeqonline/sassfromjson.git"
+  },
+  "keywords": [
+    "CQ",
+    "npm",
+    "webpack",
+    "iea"
+  ],
+  "author": "IEA Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shafeeqonline/sassfromjson/issues"
+  },
+  "homepage": "https://github.com/shafeeqonline/sassfromjson#readme"
+}
