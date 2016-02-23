@@ -7,7 +7,7 @@ var ncp = require('ncp').ncp;
 function buildNpmTemplates(options) {
   // Configure your plugin with options...
   this.createFolders = function(buildfolder){
-    var buildfolder = buildfolder + "/templates";
+    var buildfolder = path.join(buildfolder, '../templates');
     var createbuild = path.join(__dirname, '../../', buildfolder);
     function mkdir(path, root) {
   	    var dirs = path.split('/'), dir = dirs.shift(), root = (root || '') + dir + '/';
@@ -31,7 +31,6 @@ function buildNpmTemplates(options) {
             if (!fs.existsSync(tenantfolder)){
                 fs.mkdirSync(tenantfolder);
             }
-            console.log(npmcomponent)
             var componentname = npmcomponent.split('-')[2];
             var destdir = path.join(__dirname,'../../', buildfolder, tenantname, '/', componentname);
             if (!fs.existsSync(destdir)){
