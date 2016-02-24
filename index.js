@@ -8,7 +8,7 @@ function buildNpmTemplates(options) {
   // Configure your plugin with options...
   this.createFolders = function(buildfolder){
     var buildfolder = path.join(buildfolder, '../templates');
-    var createbuild = path.join(__dirname, '../../', buildfolder);
+    var createbuild = path.join(process.cwd(), buildfolder);
     function mkdir(path, root) {
   	    var dirs = path.split('/'), dir = dirs.shift(), root = (root || '') + dir + '/';
   	    try { fs.mkdirSync(root); }
@@ -19,7 +19,7 @@ function buildNpmTemplates(options) {
   	    return !dirs.length || mkdir(dirs.join('/'), root);
   	}
     mkdir(createbuild);
-    var nodepath = path.join(__dirname, '../');
+    var nodepath = path.join(process.cwd(), '/node_modules');
     var tenants = options.split(",");
     fs.readdir(nodepath, function(err, items) {
       items.forEach(function(npmcomponent, index){
@@ -27,12 +27,12 @@ function buildNpmTemplates(options) {
           // console.log(npmcomponent)
           if(npmcomponent.indexOf(tenantname+'-component-') > -1){
             var templatepath = path.join(nodepath + '/' + npmcomponent + '/template/');
-            var tenantfolder = path.join(__dirname,'../../', buildfolder, '/' ,tenantname);
+            var tenantfolder = path.join(process.cwd(), buildfolder, '/' ,tenantname);
             if (!fs.existsSync(tenantfolder)){
                 fs.mkdirSync(tenantfolder);
             }
             var componentname = npmcomponent.split('-')[2];
-            var destdir = path.join(__dirname,'../../', buildfolder, tenantname, '/', componentname);
+            var destdir = path.join(process.cwd(), buildfolder, tenantname, '/', componentname);
             if (!fs.existsSync(destdir)){
                 fs.mkdirSync(destdir);
             }
@@ -49,7 +49,9 @@ function buildNpmTemplates(options) {
 }
 
 buildNpmTemplates.prototype.apply = function(compiler, options) {
-  this.createFolders(compiler.options.output.publicPath);
+  var commonpath = path.resolve(compiler.options.output.publicPath,process.cwd());
+  var createfolder = compiler.options.output.publicPath.replace(commonpath,'');
+  this.createFolders(createfolder);
 };
 
 module.exports = buildNpmTemplates;
