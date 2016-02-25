@@ -18,33 +18,39 @@ function buildNpmTemplates(options) {
   	    }
   	    return !dirs.length || mkdir(dirs.join('/'), root);
   	}
-    mkdir(createbuild);
+    if(process.platform == "win32" || process.platform == "win64"){
+    mkdir(process.cwd() + buildfolder.replace(/\\/g,"/"));
+    var tenantParts = buildfolder.split("\\");
+    }
+    else{
+      mkdir(createbuild);
+      var tenantParts = buildfolder.split("/");
+    }
+    console.log(tenantParts[tenantParts.length - 2])
     var nodepath = path.join(process.cwd(), '/node_modules');
-    var tenants = options.split(",");
-    fs.readdir(nodepath, function(err, items) {
-      items.forEach(function(npmcomponent, index){
-        tenants.forEach(function(tenantname){
-          // console.log(npmcomponent)
-          if(npmcomponent.indexOf(tenantname+'-component-') > -1){
-            var templatepath = path.join(nodepath + '/' + npmcomponent + '/template/');
-            var tenantfolder = path.join(process.cwd(), buildfolder, '/' ,tenantname);
-            if (!fs.existsSync(tenantfolder)){
-                fs.mkdirSync(tenantfolder);
+    var options = options ? options : tenantParts[tenantParts.length - 2]
+    if(options){
+      var tenants = options.split(",");
+      fs.readdir(nodepath, function(err, items) {
+        items.forEach(function(npmcomponent, index){
+          tenants.forEach(function(tenantname){
+            if(npmcomponent.indexOf(tenantname+'-component-') > -1){
+              var templatepath = path.join(nodepath + '/' + npmcomponent + '/template/');
+              var componentname = npmcomponent.split('-')[2];
+              var destdir = path.join(process.cwd(), buildfolder, '/', componentname);
+              if (!fs.existsSync(destdir)){
+                  fs.mkdirSync(destdir);
+              }
+              ncp(templatepath, destdir, function (err) {
+               if (err) {
+                 return console.error(err);
+               }
+              });
             }
-            var componentname = npmcomponent.split('-')[2];
-            var destdir = path.join(process.cwd(), buildfolder, tenantname, '/', componentname);
-            if (!fs.existsSync(destdir)){
-                fs.mkdirSync(destdir);
-            }
-            ncp(templatepath, destdir, function (err) {
-             if (err) {
-               return console.error(err);
-             }
-            });
-          }
+          })
         })
-      })
-    });
+      });
+    }
   };
 }
 

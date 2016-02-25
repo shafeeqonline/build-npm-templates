@@ -1,6 +1,6 @@
 {
   "name": "buildnpmtemplates",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "description": "Webpack plugin to build CQ files from node modules",
   "main": "index.js",
   "dependencies": {
